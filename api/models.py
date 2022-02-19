@@ -10,5 +10,5 @@ class Message(Base):
     duration = Column(Time())
     creation_date = Column(DateTime())
     message_category = Column(String(64))
-    printed_times = Column(Integer(64))
-    printned_once = Column(Boolean())
+    printed_times = Column(Integer())
+    printed_once = Column(Boolean())

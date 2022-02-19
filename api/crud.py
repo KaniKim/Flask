@@ -1,28 +1,39 @@
 from sqlalchemy.orm import Session
-import models, database
-from domain import Message
+from .models import Message
 
 
-def insert_message(db: Session, message: Message):
-    db_message = models.Message(
-        id=message.id,
-        message=message.message,
-        duration=message.duration,
-        creation_date=message.creation_date,
-        message_category=message.message_category,
-        printed_times=message.printed_times,
-        printed_once=message.printed_once,
-    )
+class CRUD_API:
+    def insert_message(db: Session, message: Message) -> Message:
+        db_message = Message(
+            id=message.id,
+            message=message.message,
+            duration=message.duration,
+            creation_date=message.creation_date,
+            message_category=message.message_category,
+            printed_times=message.printed_times,
+            printed_once=message.printed_once,
+        )
 
-    db.add(db_message)
-    db.commit()
-    db.refresh(db_message)
-    return db_message
+        db.add(db_message)
+        db.commit()
+        db.refresh(db_message)
+        return db_message
 
+    def get_message(db: Session, id: int) -> Message:
+        return db.query(Message).filter(Message.id == id).first()
 
-def get_message(db: Session, id: int):
-    return db.query(models.Message).filter(models.Message.id == id).first()
+    def delete_message(db: Session, id: int):
+        db.query(Message).filter(Message.id == id).delete()
 
+    def patch_message(db: Session, id: int, message: Message) -> Message:
+        db_message = db.query(Message).filter(Message.id == id)
+        db_message.update(
+            message=message.message,
+            duration=message.duration,
+            creation_date=message.creation_date,
+            message_category=message.message_category,
+            printed_times=message.printed_times,
+            printed_once=message.printed_once,
+        )
 
-def delete_message(db: Session, id: int):
-    db.query(models.Message).filter(models.Message.id == id).delete()
+        return message

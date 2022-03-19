@@ -1,6 +1,6 @@
 from flask import Response
 from flask_restful import abort, marshal_with, reqparse, Resource
-from .domain import Message
+from .domain.domain import Message
 from .status import Status
 from .crud import CRUD_API
 
